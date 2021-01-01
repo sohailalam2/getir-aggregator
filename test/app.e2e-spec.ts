@@ -15,7 +15,6 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.enableShutdownHooks();
     app.useGlobalPipes(
       new ValidationPipe({
         transform: true,
@@ -26,21 +25,20 @@ describe('AppController (e2e)', () => {
       }),
     );
     app.useGlobalFilters(new HttpExceptionFilter());
+    app.enableShutdownHooks();
 
     await app.init();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await app.close();
   });
 
   it('/ (GET)', async () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .then((res) => {
-        assert(res.body.status, 'OK');
-      });
+    const response = await request(app.getHttpServer()).get('/');
+
+    expect(response.status).toBe(200);
+    expect(response.body.status).toEqual('OK');
   });
 
   it('/data (POST)', async () => {

@@ -1,6 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+/**
+ * Mongoose database schema for the records collection
+ */
 @Schema()
 export class Records {
   @Prop()
@@ -15,6 +18,7 @@ export class Records {
   @Prop()
   value!: string;
 
+  // This is a computed property and hence not a prop
   totalCount!: number;
 }
 

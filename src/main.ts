@@ -8,12 +8,16 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 
+/**
+ * Bootstrap the application and start it at the designated port
+ */
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config: ConfigService = await app.get<ConfigService>(ConfigService);
 
   const port = config.get('PORT') || 3000;
 
+  // enable validations for the data transfer objects (DTO)
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (errors: ValidationError[]): unknown =>
@@ -30,6 +34,7 @@ async function bootstrap() {
     }),
   );
 
+  // start the server on the given port
   await app.listen(port);
 }
 

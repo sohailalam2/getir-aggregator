@@ -4,6 +4,9 @@ export interface Record {
   totalCount: number;
 }
 
+/**
+ * Response DTO for the /data endpoint
+ */
 export class DataResponseDto {
   code!: number;
   msg!: string;

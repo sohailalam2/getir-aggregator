@@ -1,6 +1,9 @@
 import { IsString, IsNotEmpty, IsInt, Min, Validate } from 'class-validator';
 import { Type } from 'class-transformer';
 
+/**
+ * Request DTO with validations for the /data endpoint
+ */
 export class DataRequestDto {
   @IsString()
   @IsNotEmpty()

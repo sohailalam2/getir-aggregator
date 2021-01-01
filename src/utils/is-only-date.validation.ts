@@ -1,6 +1,7 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 
 export function IsOnlyDate(validationOptions?: ValidationOptions) {
+  // eslint-disable-next-line
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'IsOnlyDate',

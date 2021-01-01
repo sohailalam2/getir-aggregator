@@ -34,3 +34,4 @@ jobs:
         run: npm run test:e2e
         env:
           CI: true
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}

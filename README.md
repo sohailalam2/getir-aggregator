@@ -10,6 +10,20 @@ This is an awesome aggregator service for a demo database. It uses [Nest](https:
 $ npm install
 ```
 
+## Setup
+
+Before starting the application, create an `.env` file to pass the following configurations.
+
+PORT is optional and will default to 3000
+
+MONGODB_URI is required. This can be a single mongodb host url or a srv record.
+
+```env
+PORT=8080
+
+MONGODB_URI=mongodb+srv://<username>:<password>@<host>/<db>?retryWrites=true
+```
+
 ## Running the app
 
 ```bash

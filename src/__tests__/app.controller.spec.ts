@@ -1,5 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { validate } from 'class-validator';
 
 import { Model } from 'mongoose';
 
@@ -56,6 +57,94 @@ describe('AppController', () => {
   });
 
   describe('data endpoint', () => {
+    it('should fail on invalid dto when missing startDate', async () => {
+      const dto = new DataRequestDto();
+      dto.endDate = '2018-02-02';
+      dto.minCount = 2700;
+      dto.maxCount = 3000;
+
+      const errors = await validate(dto);
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].constraints.isNotEmpty).toEqual(
+        'startDate should not be empty',
+      );
+    });
+
+    it('should fail on invalid dto when missing endDate', async () => {
+      const dto = new DataRequestDto();
+      dto.startDate = '2018-02-02';
+      dto.minCount = 2700;
+      dto.maxCount = 3000;
+
+      const errors = await validate(dto);
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].constraints.isNotEmpty).toEqual(
+        'endDate should not be empty',
+      );
+    });
+
+    it('should fail on invalid dto when wrong startDate format', async () => {
+      const dto = new DataRequestDto();
+      dto.startDate = '01-26';
+      dto.endDate = '2018-02-02';
+      dto.minCount = 2700;
+      dto.maxCount = 3000;
+
+      const errors = await validate(dto);
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].constraints.IsOnlyDate).toEqual(
+        'Please provide only date like 2020-12-08',
+      );
+    });
+
+    it('should fail on invalid dto when wrong endDate format', async () => {
+      const dto = new DataRequestDto();
+      dto.startDate = '2016-01-26';
+      dto.endDate = '02-02';
+      dto.minCount = 2700;
+      dto.maxCount = 3000;
+
+      const errors = await validate(dto);
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].constraints.IsOnlyDate).toEqual(
+        'Please provide only date like 2020-12-08',
+      );
+    });
+
+    it('should fail on invalid dto when negative minCount', async () => {
+      const dto = new DataRequestDto();
+      dto.startDate = '2016-01-26';
+      dto.endDate = '2018-02-02';
+      dto.minCount = -100;
+      dto.maxCount = 3000;
+
+      const errors = await validate(dto);
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].constraints.min).toEqual(
+        'minCount must not be less than 0',
+      );
+    });
+
+    it('should fail on invalid dto when minCount greater than maxCount', async () => {
+      const dto = new DataRequestDto();
+      dto.startDate = '2016-01-26';
+      dto.endDate = '2018-02-02';
+      dto.minCount = 5000;
+      dto.maxCount = 3000;
+
+      const errors = await validate(dto);
+
+      expect(errors.length).toEqual(1);
+      expect(errors[0].constraints.IsLessThan).toEqual(
+        'minCount must be less than maxCount',
+      );
+    });
+
     it('should return correct records', async () => {
       const req: DataRequestDto = {
         startDate: '2016-01-26',

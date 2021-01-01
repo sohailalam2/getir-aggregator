@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   HttpCode,
-  HttpException,
   HttpStatus,
   Post,
 } from '@nestjs/common';
@@ -52,7 +51,11 @@ export class AppController {
         records,
       };
     } catch (err) {
-      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      return {
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        msg: err.message,
+        records: null,
+      };
     }
   }
 }

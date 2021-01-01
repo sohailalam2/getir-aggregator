@@ -1,12 +1,9 @@
-import {
-  BadRequestException,
-  ValidationError,
-  ValidationPipe,
-} from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './utils/http-exception.filter';
 
 /**
  * Bootstrap the application and start it at the designated port
@@ -20,19 +17,15 @@ async function bootstrap() {
   // enable validations for the data transfer objects (DTO)
   app.useGlobalPipes(
     new ValidationPipe({
-      exceptionFactory: (errors: ValidationError[]): unknown =>
-        new BadRequestException(errors),
       transform: true,
       whitelist: true,
       dismissDefaultMessages: false,
       forbidUnknownValues: true,
       forbidNonWhitelisted: true,
-      validationError: {
-        target: true,
-        value: true,
-      },
     }),
   );
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   // start the server on the given port
   await app.listen(port);

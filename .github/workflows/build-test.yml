@@ -15,6 +15,8 @@ jobs:
           node-version: 12
       - name: Install dependencies
         run: npm ci
+      - name: GZip for artifact
+        run: tar -czf workspace.tar.gz --exclude=workspace.tar.gz .  
       - name: Source code artifact
         uses: actions/upload-artifact@v2
         with:
@@ -30,6 +32,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: source-artifact
+      - name: Unzip artifact
+        run: tar -xzf workspace.tar.gz
       - name: Lint
         run: npm run lint
   
@@ -41,6 +45,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: source-artifact
+      - name: Unzip artifact
+        run: tar -xzf workspace.tar.gz
       - name: Unit Test
         run: npm run test:cov
         env:
@@ -59,8 +65,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: source-artifact
+      - name: Unzip artifact
+        run: tar -xzf workspace.tar.gz
       - name: Build
         run: npm run build
+      - name: GZip for artifact
+        run: tar -czf workspace.tar.gz --exclude=workspace.tar.gz .
       - name: Build artifact
         uses: actions/upload-artifact@v2
         with:
@@ -76,5 +86,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build-artifact
+      - name: Unzip artifact
+        run: tar -xzf workspace.tar.gz
       - name: Deploy to Heroku
         run: git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git origin/master:master

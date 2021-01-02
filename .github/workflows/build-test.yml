@@ -16,13 +16,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: GZip for artifact
-        run: tar -czf workspace.tar.gz --exclude=workspace.tar.gz .  
+        run: tar -czf /tmp/workspace.tar.gz .  
       - name: Source code artifact
         uses: actions/upload-artifact@v2
         with:
           name: source-artifact
           path: |
-            ./**/*     
+            /tmp/workspace.tar.gz   
   
   lint:
     runs-on: ubuntu-latest
@@ -70,13 +70,13 @@ jobs:
       - name: Build
         run: npm run build
       - name: GZip for artifact
-        run: tar -czf workspace.tar.gz --exclude=workspace.tar.gz .
+        run: tar -czf /tmp/workspace.tar.gz .  
       - name: Build artifact
         uses: actions/upload-artifact@v2
         with:
           name: build-artifact
           path: |
-            ./**/*
+            /tmp/workspace.tar.gz
       
   deploy:
     runs-on: ubuntu-latest

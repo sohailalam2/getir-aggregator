@@ -19,7 +19,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: source-artifact
-          files: |
+          path: |
             ./**/*     
   
   lint:
@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-artifact
-          files: |
+          path: |
             ./**/*
       
   deploy:

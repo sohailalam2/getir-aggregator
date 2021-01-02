@@ -89,4 +89,9 @@ jobs:
       - name: Unzip artifact
         run: tar -xzf workspace.tar.gz
       - name: Deploy to Heroku
-        run: git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git origin/master:master
+        uses: akhileshns/heroku-deploy@master
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_API_KEY }}
+          healthcheck: "https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com/health"

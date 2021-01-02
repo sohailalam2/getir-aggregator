@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Fetch unshallow
+        run: git fetch --prune --tags --unshallow  
       - name: Setup node v12
         uses: actions/setup-node@master
         with:
@@ -76,7 +78,7 @@ jobs:
         with:
           name: build-artifact
           path: |
-            /tmp/workspace.tar.gz
+            ./**/*
       
   deploy:
     runs-on: ubuntu-latest
@@ -89,9 +91,5 @@ jobs:
       - name: Unzip artifact
         run: tar -xzf workspace.tar.gz
       - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@master
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_API_KEY }}
-          healthcheck: "https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com/health"
+        if: github.ref == 'refs/heads/master'
+        run: git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git origin/master:master

@@ -1,6 +1,6 @@
-# Getir Aggregator
+# Aggregator API Service
 
-![Build & Test](https://github.com/sohailalam2/getir-aggregator/workflows/Build%20&%20Test/badge.svg?branch=master)
+![Build & Test](https://github.com/sohailalam2/g-aggregator/workflows/Build%20&%20Test/badge.svg?branch=master)
 
 ## Description
 
